@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  Racing
+
+  Created by Artem Listopadov on 6/17/21.
+  Copyright © 2021 Artem Listopadov. All rights reserved.
+*/
+
+"GAME" = "GIOCO";
+"SCORE" = "RISULTATI";
+"SETTINGS" = "REGOLAZIONI";
+"GAME OVER" = "GIOCO FINITO";
+"You result" = "Il tuo risultato: ";
+"coins" = " monete!";
+"Enter your name" = "Inserisci il tuo nome";
+"SAVE" = "MANTENERE";
+"Speed:" = "Velocita: ";
+"Name" = "Nome: ";
+"header" = "Macch.  Conducente       Monete   Velocita     Data";

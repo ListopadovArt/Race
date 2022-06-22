@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  Racing
+
+  Created by Artem Listopadov on 6/17/21.
+  Copyright © 2021 Artem Listopadov. All rights reserved.
+*/
+
+"GAME" = "GAME";
+"SCORE" = "SCORE";
+"SETTINGS" = "SETTINGS";
+"GAME OVER" = "GAME OVER";
+"You result" = "You result: ";
+"coins" = " coins!";
+"Enter your name" = "Enter your name";
+"SAVE" = "SAVE";
+"Speed:" = "Speed:";
+"Name" = "Name:";
+"header" = "  Car     Driver                     Coints   Speed         Date";
+
