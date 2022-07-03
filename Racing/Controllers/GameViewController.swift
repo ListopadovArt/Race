@@ -5,7 +5,7 @@ import CoreMotion
 
 class GameViewController: UIViewController {
     
-    let userCar = Car(name: "car.png", driver: "", coins: 0, speed: 1.0, date: "")
+    let userCar = Car(name: "car.png", driver: "Name", coins: 0, speed: 1.0, date: "")
     let settingCar = UserDefaults.standard.value(Car.self, forKey: UserDefaultsKeys.settings.rawValue )
     
     
@@ -153,10 +153,12 @@ class GameViewController: UIViewController {
     }
     
     private  func addCar(){
-        guard let name = self.settingCar?.name else {
-            return
+        if let name = self.settingCar?.name {
+            self.car.layer.contents = UIImage(named: name)?.cgImage
+        } else {
+            self.car.layer.contents = UIImage(named: "car.png")?.cgImage
         }
-        self.car.layer.contents = UIImage(named: name)?.cgImage
+        
         self.car.layer.contentsGravity = CALayerContentsGravity.resize
         self.car.layer.masksToBounds = true
         self.car.layer.frame.origin.x = self.view.frame.width / 2
@@ -365,34 +367,36 @@ class GameViewController: UIViewController {
     // MARK: - Actions
     private  func animate(_ image: UIView) {
         if flag {
-            guard let speed = self.settingCar?.speed else {
-                return
-            }
             UIView.animate(withDuration: 4, delay: 0, options: .curveLinear, animations: {
                 image.transform = CGAffineTransform(translationX: 0 , y: self.view.frame.size.height)
                 image.layer.timeOffset = image.layer.convertTime(CACurrentMediaTime(), from: nil)
                 image.layer.beginTime = CACurrentMediaTime()
-                image.layer.speed = speed
             }) { (_) in
                 image.removeFromSuperview()
                 self.timer.fire()
+            }
+            if let speed = self.settingCar?.speed {
+                image.layer.speed = speed
+            } else {
+                image.layer.speed = 1.0
             }
         }
     }
     
     private  func animateCars(_ image: UIView) {
         if flag {
-            guard let speed = self.settingCar?.speed else {
-                return
-            }
             UIView.animate(withDuration: 3, delay: 0, options: .curveLinear, animations: {
                 image.transform = CGAffineTransform(translationX: 0 , y: self.view.frame.size.height)
                 image.layer.timeOffset = image.layer.convertTime(CACurrentMediaTime(), from: nil)
                 image.layer.beginTime = CACurrentMediaTime()
-                image.layer.speed = speed
             }) { (_) in
                 image.removeFromSuperview()
                 self.timer.fire()
+            }
+            if let speed = self.settingCar?.speed {
+                image.layer.speed = speed
+            } else {
+                image.layer.speed = 1.0
             }
         }
     }
@@ -471,9 +475,25 @@ class GameViewController: UIViewController {
     private func gameOverMenu(){
         self.nukeAllAnimations()
         self.userCar.coins = self.sumCoins
-        self.userCar.name = self.settingCar!.name
-        self.userCar.speed = self.settingCar!.speed
-        self.userCar.driver = self.settingCar!.driver
+        
+        if let name = self.settingCar?.name {
+            self.userCar.name = name
+        } else {
+            self.userCar.name = "car.png"
+        }
+        
+        if let speed = self.settingCar?.speed {
+            self.userCar.speed = speed
+        } else {
+            self.userCar.speed = 1.0
+        }
+        
+        if let driver = self.settingCar?.driver {
+            self.userCar.driver = driver
+        } else {
+            self.userCar.driver = "Name"
+        }
+        
         let formatter = DateFormatter()
         formatter.dateFormat = "MM-dd-yyyy HH:mm"
         let date = formatter.string(from: Date())
@@ -552,8 +572,8 @@ class GameViewController: UIViewController {
         sprite.run(.repeatForever(
             .sequence(
                 [.group([
-                            animateFramesAction,
-                            .moveBy(x: newPositionX, y: newPositionY, duration: moveDuration)]),
+                    animateFramesAction,
+                    .moveBy(x: newPositionX, y: newPositionY, duration: moveDuration)]),
                 ])
         ))
     }

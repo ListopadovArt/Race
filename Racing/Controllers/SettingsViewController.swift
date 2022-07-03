@@ -12,7 +12,7 @@ class SettingsViewController: UIViewController {
     var car = Car(name: "", driver: "", coins: 0, speed: 1.0, date: "")
     let resultCar = UserDefaults.standard.value(Car.self, forKey: UserDefaultsKeys.result.rawValue)
     let settingsCar = UserDefaults.standard.value(Car.self, forKey: UserDefaultsKeys.settings.rawValue)
-    var nameCar = ""
+    var nameCar = "car.png"
     let menu = ButtonMenu()
     var garage = ["car.png","car0.png","car00.png"]
     let play = Player()
@@ -170,10 +170,11 @@ class SettingsViewController: UIViewController {
         self.selectCar.widthAnchor.constraint(equalToConstant: 50).isActive = true
         self.selectCar.heightAnchor.constraint(equalToConstant: 90).isActive = true
         
-        guard let name =  self.settingsCar?.name else {
-            return
+        if let name = self.settingsCar?.name {
+            self.selectCar.layer.contents = UIImage(named: name)?.cgImage
+        } else {
+            self.selectCar.layer.contents = UIImage(named: "car.png")?.cgImage
         }
-        self.selectCar.layer.contents = UIImage(named: name)?.cgImage
     }
     
     private func addLeftButton(){

@@ -38,7 +38,7 @@ class GameOverViewController: UIViewController {
         self.addLabelGameOver()
         self.addLabelResult()
         self.play.playSoundMp3(soundName: self.sounds.gameOver.rawValue)
-        self.play.volumeMusic(volume: self.volume as! Float)
+        self.play.volumeMusic(volume: self.volume as? Float ?? 0.5)
         self.menu.addMenuButton(button: menu.menuButton, view: self.view)
         self.menu.menuButton.addTarget(self, action: #selector(menuButtonAction), for: .touchUpInside)
         guard let result = self.result else {
