@@ -1,7 +1,7 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+final class SettingsViewController: UIViewController {
     
     
     // MARK: - IBOutlets
@@ -45,52 +45,7 @@ class SettingsViewController: UIViewController {
     }
     
     
-    // MARK: - Actions
-    @objc func leftButtonAction(_ sender:UIButton!) {
-        nameCar = garage.removeFirst()
-        selectCar.layer.contents = UIImage(named: nameCar)?.cgImage
-        garage.append(nameCar)
-    }
-    @objc func rightButtonAction(_ sender:UIButton!) {
-        nameCar = garage.removeLast()
-        selectCar.layer.contents = UIImage(named: nameCar)?.cgImage
-        garage.insert(nameCar, at: 0)
-    }
-    
-    @objc func saveButtonAction(_ sender:UIButton!) {
-        textFieldSettings.delegate = self
-        if let text = textFieldSettings.text {
-            car.driver = text
-        } else {
-            car.driver = "Name".localized
-        }
-        car.name = nameCar
-        UserDefaults.standard.set(encodable: car, forKey: UserDefaultsKeys.settings.rawValue)
-    }
-    
-    @objc func speedButtonAction(_ sender:UIButton!) {
-        switch sender {
-        case firstSpeedButton:
-            car.speed = 1.0
-        case secondSpeedButton:
-            car.speed = 1.5
-        case thirdSpeedButton:
-            car.speed = 2.0
-        default:
-            break
-        }
-    }
-    
-    @objc func menuButtonAction(_ sender:UIButton!) {
-        guard let controller = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "MenuViewController") as? MenuViewController else {
-            return
-        }
-        play.audioPlayer?.stop()
-        navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    
-    // MARK: - IBActions
+    // MARK: - IBAction
     @IBAction func volumeSliderPress(_ sender: UISlider) {
         let volume = sender.value
         play.volumeMusic(volume: volume)
@@ -99,9 +54,11 @@ class SettingsViewController: UIViewController {
 }
 
 extension SettingsViewController {
-    func style() {
+    private func style() {
         
+        menu.addMenuButton(button: menu.menuButton, view: self.view)
         menu.menuButton.addTarget(self, action: #selector(menuButtonAction), for: .touchUpInside)
+        
         leftButton.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
         rightButton.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
         firstSpeedButton.addTarget(self, action: #selector(speedButtonAction), for: .touchUpInside)
@@ -130,7 +87,7 @@ extension SettingsViewController {
         selectCar.layer.contentsGravity = CALayerContentsGravity.resize
         selectCar.layer.masksToBounds = true
         selectCar.translatesAutoresizingMaskIntoConstraints = false
-       
+        
         if let name = settingsCar?.name {
             selectCar.layer.contents = UIImage(named: name)?.cgImage
         } else {
@@ -138,7 +95,7 @@ extension SettingsViewController {
         }
     }
     
-    func layout() {
+    private func layout() {
         view.addSubview(labelSettings)
         view.addSubview(textFieldSettings)
         view.addSubview(selectCar)
@@ -150,7 +107,6 @@ extension SettingsViewController {
         view.addSubview(secondSpeedButton)
         view.addSubview(thirdSpeedButton)
         view.addSubview(menu.menuButton)
-        menu.addMenuButton(button: menu.menuButton, view: self.view)
         
         NSLayoutConstraint.activate([
             labelSettings.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30),
@@ -199,9 +155,55 @@ extension SettingsViewController {
     }
 }
 
-// MARK: - Extensions
+// MARK: - Actions
 extension SettingsViewController: UITextFieldDelegate  {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
 }
+
+extension SettingsViewController {
+    @objc func leftButtonAction(_ sender:UIButton!) {
+        nameCar = garage.removeFirst()
+        selectCar.layer.contents = UIImage(named: nameCar)?.cgImage
+        garage.append(nameCar)
+    }
+    @objc func rightButtonAction(_ sender:UIButton!) {
+        nameCar = garage.removeLast()
+        selectCar.layer.contents = UIImage(named: nameCar)?.cgImage
+        garage.insert(nameCar, at: 0)
+    }
+    
+    @objc func saveButtonAction(_ sender:UIButton!) {
+        textFieldSettings.delegate = self
+        if let text = textFieldSettings.text {
+            car.driver = text
+        } else {
+            car.driver = "Name".localized
+        }
+        car.name = nameCar
+        UserDefaults.standard.set(encodable: car, forKey: UserDefaultsKeys.settings.rawValue)
+    }
+    
+    @objc func speedButtonAction(_ sender:UIButton!) {
+        switch sender {
+        case firstSpeedButton:
+            car.speed = 1.0
+        case secondSpeedButton:
+            car.speed = 1.5
+        case thirdSpeedButton:
+            car.speed = 2.0
+        default:
+            break
+        }
+    }
+    
+    @objc func menuButtonAction(_ sender:UIButton!) {
+        guard let controller = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "MenuViewController") as? MenuViewController else {
+            return
+        }
+        play.audioPlayer?.stop()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+}
+

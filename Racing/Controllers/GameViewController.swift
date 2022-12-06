@@ -3,7 +3,7 @@ import UIKit
 import SpriteKit
 import CoreMotion
 
-class GameViewController: UIViewController {
+final class GameViewController: UIViewController {
     
     let userCar = Car(name: "car.png", driver: "Name", coins: 0, speed: 1.0, date: "")
     let settingCar = UserDefaults.standard.value(Car.self, forKey: UserDefaultsKeys.settings.rawValue )

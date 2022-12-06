@@ -1,7 +1,7 @@
 
 import UIKit
 
-class MenuViewController: UIViewController {
+final class MenuViewController: UIViewController {
     
     // MARK: - Properties
     let button = MenuButtons(constraint: 50, height: 70, distance: 10)
@@ -10,7 +10,7 @@ class MenuViewController: UIViewController {
     let gameButton = makeMenuButton(withText: "GAME", color: .red)
     let scoreButton = makeMenuButton(withText: "SCORE", color: .orange)
     let settingsButton = makeMenuButton(withText: "SETTINGS", color: .green)
-        
+    
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -28,18 +28,13 @@ class MenuViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-        self.addBackGround()
-        self.view.addSubview(gameButton)
-        self.view.addSubview(scoreButton)
-        self.view.addSubview(settingsButton)
-        addGameButton()
-        addScoreButton()
-        addSettingsButton()
+        super.viewWillAppear(animated)
+        addBackGround()
+        layout()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
+        super.viewDidAppear(animated)
         self.animateMyButton(button: self.gameButton)
         self.animateMyButton(button: self.scoreButton)
         self.animateMyButton(button: self.settingsButton)
@@ -55,32 +50,59 @@ class MenuViewController: UIViewController {
         self.view.addSubview(backgroundImage)
     }
     
-    private func addGameButton(){
-        gameButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: button.constraint).isActive = true
-        gameButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -button.constraint).isActive = true
-        gameButton.heightAnchor.constraint(equalToConstant: button.height).isActive = true
-        gameButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    private func animateMyButton(button: UIButton){
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true, block: { (timer) in
+            UIView.animate(withDuration: 0.6, delay: 0, options:[.allowUserInteraction] ,animations: {
+                button.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+            }) { (_) in
+                UIView.animate(withDuration: 0.6, animations: {
+                    button.transform = CGAffineTransform(scaleX: 1, y: 1)
+                })
+            }
+        })
+        timer.fire()
+    }
+    
+    private func nukeAllAnimations() {
+        self.view.subviews.forEach({$0.layer.removeAllAnimations()})
+        self.view.layer.removeAllAnimations()
+        self.view.layoutIfNeeded()
+        self.timer.invalidate()
+        self.play.audioPlayer?.stop()
+    }
+}
+
+//MARK: - Configure
+extension MenuViewController {
+    private func layout(){
+        self.view.addSubview(gameButton)
+        self.view.addSubview(scoreButton)
+        self.view.addSubview(settingsButton)
+        
+        NSLayoutConstraint.activate([
+            gameButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: button.constraint),
+            gameButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -button.constraint),
+            gameButton.heightAnchor.constraint(equalToConstant: button.height),
+            gameButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            scoreButton.leftAnchor.constraint(equalTo: gameButton.leftAnchor),
+            scoreButton.rightAnchor.constraint(equalTo: gameButton.rightAnchor),
+            scoreButton.topAnchor.constraint(equalTo: gameButton.bottomAnchor, constant: button.distance),
+            scoreButton.heightAnchor.constraint(equalToConstant: button.height),
+            
+            settingsButton.leftAnchor.constraint(equalTo: scoreButton.leftAnchor),
+            settingsButton.rightAnchor.constraint(equalTo: scoreButton.rightAnchor),
+            settingsButton.topAnchor.constraint(equalTo: scoreButton.bottomAnchor, constant: button.distance),
+            settingsButton.heightAnchor.constraint(equalToConstant: button.height),
+        ])
         gameButton.addTarget(self, action: #selector(buttonGameAction(_:)), for: .touchUpInside)
-    }
-    
-    private func addScoreButton(){
-        scoreButton.leftAnchor.constraint(equalTo: gameButton.leftAnchor).isActive = true
-        scoreButton.rightAnchor.constraint(equalTo: gameButton.rightAnchor).isActive = true
-        scoreButton.topAnchor.constraint(equalTo: gameButton.bottomAnchor, constant: button.distance).isActive = true
-        scoreButton.heightAnchor.constraint(equalToConstant: button.height).isActive = true
         scoreButton.addTarget(self, action: #selector(buttonScoreAction(_:)), for: .touchUpInside)
-    }
-    
-    private func addSettingsButton(){
-        settingsButton.leftAnchor.constraint(equalTo: scoreButton.leftAnchor).isActive = true
-        settingsButton.rightAnchor.constraint(equalTo: scoreButton.rightAnchor).isActive = true
-        settingsButton.topAnchor.constraint(equalTo: scoreButton.bottomAnchor, constant: button.distance).isActive = true
-        settingsButton.heightAnchor.constraint(equalToConstant: button.height).isActive = true
         settingsButton.addTarget(self, action: #selector(buttonSettingsAction(_:)), for: .touchUpInside)
     }
-    
-    
-    // MARK: - Actions
+}
+
+// MARK: - Actions
+extension MenuViewController {
     @objc func buttonGameAction(_ sender:UIButton!) {
         guard let controller = UIStoryboard(name: "Game", bundle: nil).instantiateViewController(withIdentifier: "GameViewController") as? GameViewController else {
             return
@@ -103,26 +125,5 @@ class MenuViewController: UIViewController {
         }
         self.nukeAllAnimations()
         self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    private func animateMyButton(button: UIButton){
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true, block: { (timer) in
-            UIView.animate(withDuration: 0.6, delay: 0, options:[.allowUserInteraction] ,animations: {
-                button.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
-            }) { (_) in
-                UIView.animate(withDuration: 0.6, animations: {
-                    button.transform = CGAffineTransform(scaleX: 1, y: 1)
-                })
-            }
-        })
-        timer.fire()
-    }
-    
-    private func nukeAllAnimations() {
-        self.view.subviews.forEach({$0.layer.removeAllAnimations()})
-        self.view.layer.removeAllAnimations()
-        self.view.layoutIfNeeded()
-        self.timer.invalidate()
-        self.play.audioPlayer?.stop()
     }
 }
