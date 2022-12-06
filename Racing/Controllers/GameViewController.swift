@@ -13,20 +13,8 @@ class GameViewController: UIViewController {
     var motionManager = CMMotionManager()
     var sumCoins = 0
     private let animationView = SKView()
-    let rightButton: UIButton = {
-        let rightButton = UIButton()
-        rightButton.layer.contents = UIImage(named: GameButton.right.rawValue)?.cgImage
-        rightButton.layer.contentsGravity = CALayerContentsGravity.resize
-        rightButton.layer.masksToBounds = true
-        return rightButton
-    }()
-    let leftButton: UIButton = {
-        let leftButton = UIButton()
-        leftButton.layer.contents = UIImage(named: GameButton.left.rawValue)?.cgImage
-        leftButton.layer.contentsGravity = CALayerContentsGravity.resize
-        leftButton.layer.masksToBounds = true
-        return leftButton
-    }()
+    let rightButton = makeGameButton(withName: GameButton.right.rawValue)
+    let leftButton = makeGameButton(withName: GameButton.left.rawValue)
     let coinsImage: UIView = {
         let coin = UIView()
         coin.layer.contents = UIImage(named: "Coins.png")?.cgImage

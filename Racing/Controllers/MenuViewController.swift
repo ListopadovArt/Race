@@ -7,43 +7,10 @@ class MenuViewController: UIViewController {
     let button = MenuButtons(constraint: 50, height: 70, distance: 10)
     var timer = Timer()
     var play = Player()
-    let gameButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.red
-        button.roundCorners()
-        var labelText = "GAME".localized
-        let buttonAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        let buttonAttributesString = NSAttributedString(string: labelText, attributes: buttonAttributes)
-        button.setAttributedTitle(buttonAttributesString, for: .normal)
-        button.titleLabel?.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let scoreButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.orange
-        button.roundCorners()
-        var labelText = "SCORE".localized
-        let buttonAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        let buttonAttributesString = NSAttributedString(string: labelText, attributes: buttonAttributes)
-        button.setAttributedTitle(buttonAttributesString, for: .normal)
-        button.titleLabel?.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let settingsButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.green
-        button.roundCorners()
-        var labelText = "SETTINGS".localized
-        let buttonAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        let buttonAttributesString = NSAttributedString(string: labelText, attributes: buttonAttributes)
-        button.setAttributedTitle(buttonAttributesString, for: .normal)
-        button.titleLabel?.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
+    let gameButton = makeMenuButton(withText: "GAME", color: .red)
+    let scoreButton = makeMenuButton(withText: "SCORE", color: .orange)
+    let settingsButton = makeMenuButton(withText: "SETTINGS", color: .green)
+        
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {

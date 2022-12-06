@@ -17,125 +17,23 @@ class SettingsViewController: UIViewController {
     var garage = ["car.png","car0.png","car00.png"]
     let play = Player()
     let sounds = gameSounds.self
-    let labelSettings: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        let labelAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
-        let labelAttributesString = NSAttributedString(string: "SETTINGS".localized, attributes: labelAttributes)
-        label.attributedText = labelAttributesString
-        label.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    let textFieldSettings: UITextField = {
-        let field = UITextField()
-        field.placeholder = "Enter your name".localized
-        field.textAlignment = .center
-        field.font = UIFont.systemFont(ofSize: 30, weight: .light)
-        field.translatesAutoresizingMaskIntoConstraints = false
-        return field
-    }()
-    let selectCar: UIView = {
-        let car = UIView()
-        car.layer.contentsGravity = CALayerContentsGravity.resize
-        car.layer.masksToBounds = true
-        car.translatesAutoresizingMaskIntoConstraints = false
-        return car
-    }()
-    let rightButton: UIButton = {
-        let rightButton = UIButton()
-        rightButton.layer.contents = UIImage(named: "Right.png")?.cgImage
-        rightButton.layer.contentsGravity = CALayerContentsGravity.resize
-        rightButton.layer.masksToBounds = true
-        rightButton.translatesAutoresizingMaskIntoConstraints = false
-        return rightButton
-    }()
-    let leftButton: UIButton = {
-        let leftButton = UIButton()
-        leftButton.layer.contents = UIImage(named: "Left.png")?.cgImage
-        leftButton.layer.contentsGravity = CALayerContentsGravity.resize
-        leftButton.layer.masksToBounds = true
-        leftButton.translatesAutoresizingMaskIntoConstraints = false
-        return leftButton
-    }()
-    let saveButton: UIButton = {
-        let save = UIButton(type: .system)
-        save.layer.borderWidth = 1
-        save.tintColor = UIColor.black
-        save.roundCorners(radius: 5)
-        save.setTitle("SAVE".localized, for: .normal)
-        save.translatesAutoresizingMaskIntoConstraints = false
-        return save
-    }()
-    let labelSpeed: UILabel = {
-        let label = UILabel()
-        label.text = "Speed:".localized
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    let firstSpeedButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("x1.0", for: .normal)
-        button.roundCorners(radius: 5)
-        button.layer.borderWidth = 1
-        button.tintColor = UIColor.black
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let secondSpeedButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("x1.5", for: .normal)
-        button.roundCorners(radius: 5)
-        button.layer.borderWidth = 1
-        button.tintColor = UIColor.black
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let thirdSpeedButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("x2.0", for: .normal)
-        button.roundCorners(radius: 5)
-        button.layer.borderWidth = 1
-        button.tintColor = UIColor.black
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let labelSettings = makeTitleLabel(withTitle: "SETTINGS".localized)
+    let textFieldSettings = UITextField()
+    let selectCar = UIView()
+    let rightButton = makeCarSelectionButton(withDirection: "Right.png")
+    let leftButton = makeCarSelectionButton(withDirection: "Left.png")
+    let firstSpeedButton = makeSpeedButton(withSpeed: "x1.0")
+    let secondSpeedButton = makeSpeedButton(withSpeed: "x1.5")
+    let thirdSpeedButton = makeSpeedButton(withSpeed: "x2.0")
+    let saveButton = UIButton(type: .system)
+    let labelSpeed = UILabel()
     
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.textFieldSettings.delegate = self
-        self.view.addSubview(labelSettings)
-        self.view.addSubview(textFieldSettings)
-        self.view.addSubview(selectCar)
-        self.view.addSubview(rightButton)
-        self.view.addSubview(leftButton)
-        self.view.addSubview(saveButton)
-        self.view.addSubview(labelSpeed)
-        self.view.addSubview(firstSpeedButton)
-        self.view.addSubview(secondSpeedButton)
-        self.view.addSubview(thirdSpeedButton)
-        self.view.addSubview(self.menu.menuButton)
-        self.addLabelSettings()
-        self.addTextFieldSettings()
-        self.addCar()
-        self.addLeftButton()
-        self.addRightButton()
-        self.addLabelSpeed()
-        self.addSaveButton()
-        self.addFirstSpeedButton()
-        self.addSecondSpeedButton()
-        self.addThirdSpeedButton()
-        self.menu.addMenuButton(button: menu.menuButton, view: self.view)
-        self.menu.menuButton.addTarget(self, action: #selector(menuButtonAction), for: .touchUpInside)
-        self.leftButton.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
-        self.rightButton.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
-        self.saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
-        self.firstSpeedButton.addTarget(self, action: #selector(speedButtonAction), for: .touchUpInside)
-        self.secondSpeedButton.addTarget(self, action: #selector(speedButtonAction), for: .touchUpInside)
-        self.thirdSpeedButton.addTarget(self, action: #selector(speedButtonAction), for: .touchUpInside)
+        layout()
+        style()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -147,111 +45,37 @@ class SettingsViewController: UIViewController {
     }
     
     
-    // MARK: - Configure
-    private func addLabelSettings(){
-        labelSettings.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
-        labelSettings.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30).isActive = true
-        labelSettings.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
-    }
-    
-    private func addTextFieldSettings(){
-        self.textFieldSettings.leftAnchor.constraint(equalTo: self.labelSettings.leftAnchor, constant: -20).isActive = true
-        self.textFieldSettings.rightAnchor.constraint(equalTo: self.labelSettings.rightAnchor, constant: 20).isActive = true
-        self.textFieldSettings.topAnchor.constraint(equalTo: self.labelSettings.bottomAnchor, constant: 30).isActive = true
-        self.textFieldSettings.centerXAnchor.constraint(equalTo: self.labelSettings.centerXAnchor).isActive = true
-        
-        let driver = resultCar?.driver
-        self.textFieldSettings.text = driver
-    }
-    
-    private func addCar(){
-        self.selectCar.topAnchor.constraint(equalTo: self.textFieldSettings.bottomAnchor, constant: 30).isActive = true
-        self.selectCar.centerXAnchor.constraint(equalTo: self.textFieldSettings.centerXAnchor).isActive = true
-        self.selectCar.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        self.selectCar.heightAnchor.constraint(equalToConstant: 90).isActive = true
-        
-        if let name = self.settingsCar?.name {
-            self.selectCar.layer.contents = UIImage(named: name)?.cgImage
-        } else {
-            self.selectCar.layer.contents = UIImage(named: "car.png")?.cgImage
-        }
-    }
-    
-    private func addLeftButton(){
-        self.leftButton.centerYAnchor.constraint(equalTo: self.selectCar.centerYAnchor).isActive = true
-        self.leftButton.rightAnchor.constraint(equalTo: self.selectCar.leftAnchor, constant: -20).isActive = true
-        self.leftButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-    
-    private func addRightButton(){
-        self.rightButton.centerYAnchor.constraint(equalTo: self.selectCar.centerYAnchor).isActive = true
-        self.rightButton.leftAnchor.constraint(equalTo: self.selectCar.rightAnchor, constant: 20).isActive = true
-        self.rightButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-    
-    private func addLabelSpeed(){
-        self.labelSpeed.topAnchor.constraint(equalTo: self.selectCar.bottomAnchor, constant: 30).isActive = true
-        self.labelSpeed.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
-        self.labelSpeed.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -310).isActive = true
-    }
-    
-    private func addFirstSpeedButton(){
-        self.firstSpeedButton.centerYAnchor.constraint(equalTo:  self.labelSpeed.centerYAnchor).isActive = true
-        self.firstSpeedButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        self.firstSpeedButton.leftAnchor.constraint(equalTo: self.labelSpeed.rightAnchor, constant: 20).isActive = true
-        
-    }
-    
-    private func addSecondSpeedButton(){
-        self.secondSpeedButton.centerYAnchor.constraint(equalTo:  self.firstSpeedButton.centerYAnchor).isActive = true
-        self.secondSpeedButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        self.secondSpeedButton.leftAnchor.constraint(equalTo: self.firstSpeedButton.rightAnchor, constant: 20).isActive = true
-    }
-    
-    private func addThirdSpeedButton(){
-        self.thirdSpeedButton.centerYAnchor.constraint(equalTo:  self.secondSpeedButton.centerYAnchor).isActive = true
-        self.thirdSpeedButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        self.thirdSpeedButton.leftAnchor.constraint(equalTo: self.secondSpeedButton.rightAnchor, constant: 20).isActive = true
-    }
-    
-    private func addSaveButton(){
-        self.saveButton.centerXAnchor.constraint(equalTo: self.labelSpeed.centerXAnchor).isActive = true
-        self.saveButton.topAnchor.constraint(equalTo: self.labelSpeed.bottomAnchor, constant: 30).isActive = true
-        self.saveButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 100).isActive = true
-        self.saveButton.rightAnchor.constraint(equalTo: self.view.rightAnchor , constant: -100).isActive = true
-    }
-    
-    
     // MARK: - Actions
     @objc func leftButtonAction(_ sender:UIButton!) {
-        self.nameCar = garage.removeFirst()
-        self.selectCar.layer.contents = UIImage(named: self.nameCar)?.cgImage
-        garage.append(self.nameCar)
+        nameCar = garage.removeFirst()
+        selectCar.layer.contents = UIImage(named: nameCar)?.cgImage
+        garage.append(nameCar)
     }
     @objc func rightButtonAction(_ sender:UIButton!) {
-        self.nameCar = garage.removeLast()
-        self.selectCar.layer.contents = UIImage(named: self.nameCar)?.cgImage
-        garage.insert(self.nameCar, at: 0)
+        nameCar = garage.removeLast()
+        selectCar.layer.contents = UIImage(named: nameCar)?.cgImage
+        garage.insert(nameCar, at: 0)
     }
     
     @objc func saveButtonAction(_ sender:UIButton!) {
-        if let text = self.textFieldSettings.text {
-            self.car.driver = text
+        textFieldSettings.delegate = self
+        if let text = textFieldSettings.text {
+            car.driver = text
         } else {
-            self.car.driver = "Name".localized
+            car.driver = "Name".localized
         }
-        self.car.name = self.nameCar
-        UserDefaults.standard.set(encodable: self.car, forKey: UserDefaultsKeys.settings.rawValue)
+        car.name = nameCar
+        UserDefaults.standard.set(encodable: car, forKey: UserDefaultsKeys.settings.rawValue)
     }
     
     @objc func speedButtonAction(_ sender:UIButton!) {
         switch sender {
-        case self.firstSpeedButton:
-            self.car.speed = 1.0
-        case self.secondSpeedButton:
-            self.car.speed = 1.5
-        case self.thirdSpeedButton:
-            self.car.speed = 2.0
+        case firstSpeedButton:
+            car.speed = 1.0
+        case secondSpeedButton:
+            car.speed = 1.5
+        case thirdSpeedButton:
+            car.speed = 2.0
         default:
             break
         }
@@ -261,23 +85,123 @@ class SettingsViewController: UIViewController {
         guard let controller = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "MenuViewController") as? MenuViewController else {
             return
         }
-        self.play.audioPlayer?.stop()
-        self.navigationController?.pushViewController(controller, animated: true)
+        play.audioPlayer?.stop()
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     
     // MARK: - IBActions
     @IBAction func volumeSliderPress(_ sender: UISlider) {
         let volume = sender.value
-        self.play.volumeMusic(volume: volume)
+        play.volumeMusic(volume: volume)
         UserDefaults.standard.setValue(volume, forKey: UserDefaultsKeys.volume.rawValue)
     }
 }
 
+extension SettingsViewController {
+    func style() {
+        
+        menu.menuButton.addTarget(self, action: #selector(menuButtonAction), for: .touchUpInside)
+        leftButton.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
+        firstSpeedButton.addTarget(self, action: #selector(speedButtonAction), for: .touchUpInside)
+        secondSpeedButton.addTarget(self, action: #selector(speedButtonAction), for: .touchUpInside)
+        thirdSpeedButton.addTarget(self, action: #selector(speedButtonAction), for: .touchUpInside)
+        
+        saveButton.layer.borderWidth = 1
+        saveButton.tintColor = UIColor.black
+        saveButton.roundCorners(radius: 5)
+        saveButton.setTitle("SAVE".localized, for: .normal)
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
+        
+        labelSpeed.text = "Speed:".localized
+        labelSpeed.textAlignment = .center
+        labelSpeed.translatesAutoresizingMaskIntoConstraints = false
+        
+        textFieldSettings.placeholder = "Enter your name".localized
+        textFieldSettings.textAlignment = .center
+        textFieldSettings.font = UIFont.systemFont(ofSize: 30, weight: .light)
+        textFieldSettings.translatesAutoresizingMaskIntoConstraints = false
+        
+        let driver = resultCar?.driver
+        textFieldSettings.text = driver
+        
+        selectCar.layer.contentsGravity = CALayerContentsGravity.resize
+        selectCar.layer.masksToBounds = true
+        selectCar.translatesAutoresizingMaskIntoConstraints = false
+       
+        if let name = settingsCar?.name {
+            selectCar.layer.contents = UIImage(named: name)?.cgImage
+        } else {
+            selectCar.layer.contents = UIImage(named: nameCar)?.cgImage
+        }
+    }
+    
+    func layout() {
+        view.addSubview(labelSettings)
+        view.addSubview(textFieldSettings)
+        view.addSubview(selectCar)
+        view.addSubview(rightButton)
+        view.addSubview(leftButton)
+        view.addSubview(saveButton)
+        view.addSubview(labelSpeed)
+        view.addSubview(firstSpeedButton)
+        view.addSubview(secondSpeedButton)
+        view.addSubview(thirdSpeedButton)
+        view.addSubview(menu.menuButton)
+        menu.addMenuButton(button: menu.menuButton, view: self.view)
+        
+        NSLayoutConstraint.activate([
+            labelSettings.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30),
+            labelSettings.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30),
+            labelSettings.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
+            
+            textFieldSettings.leftAnchor.constraint(equalTo: labelSettings.leftAnchor, constant: -20),
+            textFieldSettings.rightAnchor.constraint(equalTo: labelSettings.rightAnchor, constant: 20),
+            textFieldSettings.topAnchor.constraint(equalTo: labelSettings.bottomAnchor, constant: 30),
+            textFieldSettings.centerXAnchor.constraint(equalTo: labelSettings.centerXAnchor),
+            
+            selectCar.topAnchor.constraint(equalTo: textFieldSettings.bottomAnchor, constant: 30),
+            selectCar.centerXAnchor.constraint(equalTo: textFieldSettings.centerXAnchor),
+            selectCar.widthAnchor.constraint(equalToConstant: 50),
+            selectCar.heightAnchor.constraint(equalToConstant: 90),
+            
+            leftButton.centerYAnchor.constraint(equalTo: selectCar.centerYAnchor),
+            leftButton.rightAnchor.constraint(equalTo: selectCar.leftAnchor, constant: -20),
+            leftButton.widthAnchor.constraint(equalToConstant: 50),
+            
+            rightButton.centerYAnchor.constraint(equalTo: selectCar.centerYAnchor),
+            rightButton.leftAnchor.constraint(equalTo: selectCar.rightAnchor, constant: 20),
+            rightButton.widthAnchor.constraint(equalToConstant: 50),
+            
+            saveButton.centerXAnchor.constraint(equalTo: labelSpeed.centerXAnchor),
+            saveButton.topAnchor.constraint(equalTo: labelSpeed.bottomAnchor, constant: 30),
+            saveButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 100),
+            saveButton.rightAnchor.constraint(equalTo: view.rightAnchor , constant: -100),
+            
+            labelSpeed.topAnchor.constraint(equalTo: selectCar.bottomAnchor, constant: 30),
+            labelSpeed.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30),
+            labelSpeed.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -310),
+            
+            firstSpeedButton.centerYAnchor.constraint(equalTo: labelSpeed.centerYAnchor),
+            firstSpeedButton.widthAnchor.constraint(equalToConstant: 50),
+            firstSpeedButton.leftAnchor.constraint(equalTo: labelSpeed.rightAnchor, constant: 20),
+            
+            secondSpeedButton.centerYAnchor.constraint(equalTo: firstSpeedButton.centerYAnchor),
+            secondSpeedButton.widthAnchor.constraint(equalToConstant: 50),
+            secondSpeedButton.leftAnchor.constraint(equalTo: firstSpeedButton.rightAnchor, constant: 20),
+            
+            thirdSpeedButton.centerYAnchor.constraint(equalTo: secondSpeedButton.centerYAnchor),
+            thirdSpeedButton.widthAnchor.constraint(equalToConstant: 50),
+            thirdSpeedButton.leftAnchor.constraint(equalTo: secondSpeedButton.rightAnchor, constant: 20),
+        ])
+    }
+}
 
 // MARK: - Extensions
 extension SettingsViewController: UITextFieldDelegate  {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
 }

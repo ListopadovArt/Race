@@ -11,16 +11,17 @@ class GameOverViewController: UIViewController {
     let play = Player()
     let sounds = gameSounds.self
     let volume = UserDefaults.standard.value(forKey: UserDefaultsKeys.volume.rawValue)
-    let labelGameOver: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        let labelAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
-        let labelAttributesString = NSAttributedString(string: "GAME OVER".localized, attributes: labelAttributes)
-        label.attributedText = labelAttributesString
-        label.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    let labelGameOver = makeTitleLabel(withTitle: "GAME OVER".localized)
+//    let labelGameOver: UILabel = {
+//        let label = UILabel()
+//        label.textAlignment = .center
+//        let labelAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+//        let labelAttributesString = NSAttributedString(string: "GAME OVER".localized, attributes: labelAttributes)
+//        label.attributedText = labelAttributesString
+//        label.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        return label
+//    }()
     let labelResult: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
