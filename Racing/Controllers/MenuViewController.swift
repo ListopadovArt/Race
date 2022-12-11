@@ -3,6 +3,7 @@ import UIKit
 
 final class MenuViewController: UIViewController {
     
+    
     // MARK: - Properties
     let button = MenuButtons(constraint: 50, height: 70, distance: 10)
     var timer = Timer()
@@ -40,8 +41,6 @@ final class MenuViewController: UIViewController {
         self.animateMyButton(button: self.settingsButton)
     }
     
-    
-    // MARK: - Configure
     private func addBackGround(){
         let backgroundImage = UIImageView(frame: self.view.frame)
         backgroundImage.image = UIImage(named: "RoadBackground.png")
@@ -49,28 +48,8 @@ final class MenuViewController: UIViewController {
         backgroundImage.contentMode = .scaleAspectFill
         self.view.addSubview(backgroundImage)
     }
-    
-    private func animateMyButton(button: UIButton){
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true, block: { (timer) in
-            UIView.animate(withDuration: 0.6, delay: 0, options:[.allowUserInteraction] ,animations: {
-                button.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
-            }) { (_) in
-                UIView.animate(withDuration: 0.6, animations: {
-                    button.transform = CGAffineTransform(scaleX: 1, y: 1)
-                })
-            }
-        })
-        timer.fire()
-    }
-    
-    private func nukeAllAnimations() {
-        self.view.subviews.forEach({$0.layer.removeAllAnimations()})
-        self.view.layer.removeAllAnimations()
-        self.view.layoutIfNeeded()
-        self.timer.invalidate()
-        self.play.audioPlayer?.stop()
-    }
 }
+
 
 //MARK: - Configure
 extension MenuViewController {
@@ -101,6 +80,7 @@ extension MenuViewController {
     }
 }
 
+
 // MARK: - Actions
 extension MenuViewController {
     @objc func buttonGameAction(_ sender:UIButton!) {
@@ -125,5 +105,30 @@ extension MenuViewController {
         }
         self.nukeAllAnimations()
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+
+// MARK: - Animation
+extension MenuViewController {
+    private func animateMyButton(button: UIButton){
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true, block: { (timer) in
+            UIView.animate(withDuration: 0.6, delay: 0, options:[.allowUserInteraction] ,animations: {
+                button.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+            }) { (_) in
+                UIView.animate(withDuration: 0.6, animations: {
+                    button.transform = CGAffineTransform(scaleX: 1, y: 1)
+                })
+            }
+        })
+        timer.fire()
+    }
+    
+    private func nukeAllAnimations() {
+        self.view.subviews.forEach({$0.layer.removeAllAnimations()})
+        self.view.layer.removeAllAnimations()
+        self.view.layoutIfNeeded()
+        self.timer.invalidate()
+        self.play.audioPlayer?.stop()
     }
 }

@@ -21,7 +21,6 @@ final class GameOverViewController: UIViewController {
         layout()
         style()
     }
-    
 }
 
 //MARK: - Configure

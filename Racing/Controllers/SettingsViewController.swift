@@ -43,14 +43,6 @@ final class SettingsViewController: UIViewController {
         volumeSlider.value = volume
         self.play.volumeMusic(volume: volume)
     }
-    
-    
-    // MARK: - IBAction
-    @IBAction func volumeSliderPress(_ sender: UISlider) {
-        let volume = sender.value
-        play.volumeMusic(volume: volume)
-        UserDefaults.standard.setValue(volume, forKey: UserDefaultsKeys.volume.rawValue)
-    }
 }
 
 extension SettingsViewController {
@@ -58,6 +50,8 @@ extension SettingsViewController {
         
         menu.addMenuButton(button: menu.menuButton, view: self.view)
         menu.menuButton.addTarget(self, action: #selector(menuButtonAction), for: .touchUpInside)
+        
+        volumeSlider.addTarget(self, action: #selector(volumeSliderPress), for: .touchUpInside)
         
         leftButton.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
         rightButton.addTarget(self, action: #selector(rightButtonAction), for: .touchUpInside)
@@ -155,6 +149,7 @@ extension SettingsViewController {
     }
 }
 
+
 // MARK: - Actions
 extension SettingsViewController: UITextFieldDelegate  {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -204,6 +199,12 @@ extension SettingsViewController {
         }
         play.audioPlayer?.stop()
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    @objc func volumeSliderPress(_ sender: UISlider) {
+        let volume = sender.value
+        play.volumeMusic(volume: volume)
+        UserDefaults.standard.setValue(volume, forKey: UserDefaultsKeys.volume.rawValue)
     }
 }
 
