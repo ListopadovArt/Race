@@ -1,48 +1,16 @@
 
 import UIKit
 
-class MenuViewController: UIViewController {
+final class MenuViewController: UIViewController {
+    
     
     // MARK: - Properties
     let button = MenuButtons(constraint: 50, height: 70, distance: 10)
     var timer = Timer()
     var play = Player()
-    let gameButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.red
-        button.roundCorners()
-        var labelText = "GAME".localized
-        let buttonAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        let buttonAttributesString = NSAttributedString(string: labelText, attributes: buttonAttributes)
-        button.setAttributedTitle(buttonAttributesString, for: .normal)
-        button.titleLabel?.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let scoreButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.orange
-        button.roundCorners()
-        var labelText = "SCORE".localized
-        let buttonAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        let buttonAttributesString = NSAttributedString(string: labelText, attributes: buttonAttributes)
-        button.setAttributedTitle(buttonAttributesString, for: .normal)
-        button.titleLabel?.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let settingsButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.green
-        button.roundCorners()
-        var labelText = "SETTINGS".localized
-        let buttonAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        let buttonAttributesString = NSAttributedString(string: labelText, attributes: buttonAttributes)
-        button.setAttributedTitle(buttonAttributesString, for: .normal)
-        button.titleLabel?.font = UIFont(name: Fonts.konstanting.rawValue, size: 50)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let gameButton = makeMenuButton(withText: "GAME", color: .red)
+    let scoreButton = makeMenuButton(withText: "SCORE", color: .orange)
+    let settingsButton = makeMenuButton(withText: "SETTINGS", color: .green)
     
     
     // MARK: - View Life Cycle
@@ -61,25 +29,18 @@ class MenuViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-        self.addBackGround()
-        self.view.addSubview(gameButton)
-        self.view.addSubview(scoreButton)
-        self.view.addSubview(settingsButton)
-        addGameButton()
-        addScoreButton()
-        addSettingsButton()
+        super.viewWillAppear(animated)
+        addBackGround()
+        layout()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
+        super.viewDidAppear(animated)
         self.animateMyButton(button: self.gameButton)
         self.animateMyButton(button: self.scoreButton)
         self.animateMyButton(button: self.settingsButton)
     }
     
-    
-    // MARK: - Configure
     private func addBackGround(){
         let backgroundImage = UIImageView(frame: self.view.frame)
         backgroundImage.image = UIImage(named: "RoadBackground.png")
@@ -87,33 +48,41 @@ class MenuViewController: UIViewController {
         backgroundImage.contentMode = .scaleAspectFill
         self.view.addSubview(backgroundImage)
     }
-    
-    private func addGameButton(){
-        gameButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: button.constraint).isActive = true
-        gameButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -button.constraint).isActive = true
-        gameButton.heightAnchor.constraint(equalToConstant: button.height).isActive = true
-        gameButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+}
+
+
+//MARK: - Configure
+extension MenuViewController {
+    private func layout(){
+        self.view.addSubview(gameButton)
+        self.view.addSubview(scoreButton)
+        self.view.addSubview(settingsButton)
+        
+        NSLayoutConstraint.activate([
+            gameButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: button.constraint),
+            gameButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -button.constraint),
+            gameButton.heightAnchor.constraint(equalToConstant: button.height),
+            gameButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            scoreButton.leftAnchor.constraint(equalTo: gameButton.leftAnchor),
+            scoreButton.rightAnchor.constraint(equalTo: gameButton.rightAnchor),
+            scoreButton.topAnchor.constraint(equalTo: gameButton.bottomAnchor, constant: button.distance),
+            scoreButton.heightAnchor.constraint(equalToConstant: button.height),
+            
+            settingsButton.leftAnchor.constraint(equalTo: scoreButton.leftAnchor),
+            settingsButton.rightAnchor.constraint(equalTo: scoreButton.rightAnchor),
+            settingsButton.topAnchor.constraint(equalTo: scoreButton.bottomAnchor, constant: button.distance),
+            settingsButton.heightAnchor.constraint(equalToConstant: button.height),
+        ])
         gameButton.addTarget(self, action: #selector(buttonGameAction(_:)), for: .touchUpInside)
-    }
-    
-    private func addScoreButton(){
-        scoreButton.leftAnchor.constraint(equalTo: gameButton.leftAnchor).isActive = true
-        scoreButton.rightAnchor.constraint(equalTo: gameButton.rightAnchor).isActive = true
-        scoreButton.topAnchor.constraint(equalTo: gameButton.bottomAnchor, constant: button.distance).isActive = true
-        scoreButton.heightAnchor.constraint(equalToConstant: button.height).isActive = true
         scoreButton.addTarget(self, action: #selector(buttonScoreAction(_:)), for: .touchUpInside)
-    }
-    
-    private func addSettingsButton(){
-        settingsButton.leftAnchor.constraint(equalTo: scoreButton.leftAnchor).isActive = true
-        settingsButton.rightAnchor.constraint(equalTo: scoreButton.rightAnchor).isActive = true
-        settingsButton.topAnchor.constraint(equalTo: scoreButton.bottomAnchor, constant: button.distance).isActive = true
-        settingsButton.heightAnchor.constraint(equalToConstant: button.height).isActive = true
         settingsButton.addTarget(self, action: #selector(buttonSettingsAction(_:)), for: .touchUpInside)
     }
-    
-    
-    // MARK: - Actions
+}
+
+
+// MARK: - Actions
+extension MenuViewController {
     @objc func buttonGameAction(_ sender:UIButton!) {
         guard let controller = UIStoryboard(name: "Game", bundle: nil).instantiateViewController(withIdentifier: "GameViewController") as? GameViewController else {
             return
@@ -137,7 +106,11 @@ class MenuViewController: UIViewController {
         self.nukeAllAnimations()
         self.navigationController?.pushViewController(controller, animated: true)
     }
-    
+}
+
+
+// MARK: - Animation
+extension MenuViewController {
     private func animateMyButton(button: UIButton){
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true, block: { (timer) in
             UIView.animate(withDuration: 0.6, delay: 0, options:[.allowUserInteraction] ,animations: {

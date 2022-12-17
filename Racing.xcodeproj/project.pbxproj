@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AF1C847E263D88EC00A6E6A0 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1C847D263D88EC00A6E6A0 /* UserDefaults+Extensions.swift */; };
+		AF674DF8293FD16100734230 /* Factories.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF674DF7293FD16100734230 /* Factories.swift */; };
 		AF7577D726642FB500D5E010 /* ScoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7577D626642FB500D5E010 /* ScoreTableViewCell.swift */; };
 		AF7577D9266431AA00D5E010 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7577D8266431AA00D5E010 /* Score.swift */; };
 		AF9E471B267B812C00CAA45C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AF9E471D267B812C00CAA45C /* Localizable.strings */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		AF1C847D263D88EC00A6E6A0 /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
+		AF674DF7293FD16100734230 /* Factories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factories.swift; sourceTree = "<group>"; };
 		AF7577D626642FB500D5E010 /* ScoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreTableViewCell.swift; sourceTree = "<group>"; };
 		AF7577D8266431AA00D5E010 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
 		AF9E471C267B812C00CAA45C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -89,6 +91,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AF674DF5293FCFBA00734230 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				AFCFF7CA26353787002F6E50 /* Assets.xcassets */,
+				AFCFF7CC26353787002F6E50 /* LaunchScreen.storyboard */,
+				AFCFF7CF26353787002F6E50 /* Info.plist */,
+			);
+			name = Files;
+			sourceTree = "<group>";
+		};
 		AF7577D326642F6E00D5E010 /* Score */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,16 +131,15 @@
 		AFCFF7C026353781002F6E50 /* Racing */ = {
 			isa = PBXGroup;
 			children = (
+				AFCFF7C126353781002F6E50 /* AppDelegate.swift */,
+				AF674DF7293FD16100734230 /* Factories.swift */,
+				AF674DF5293FCFBA00734230 /* Files */,
 				AFCFF7FE2635740E002F6E50 /* Sounds */,
 				AFCFF7F726355990002F6E50 /* Extensions */,
 				AFCFF7D5263538CF002F6E50 /* Fonts */,
-				AFCFF7C126353781002F6E50 /* AppDelegate.swift */,
 				AFCFF7E826353AD3002F6E50 /* Models */,
 				AFCFF7E626353ABC002F6E50 /* Views */,
 				AFCFF7E726353AC7002F6E50 /* Controllers */,
-				AFCFF7CA26353787002F6E50 /* Assets.xcassets */,
-				AFCFF7CC26353787002F6E50 /* LaunchScreen.storyboard */,
-				AFCFF7CF26353787002F6E50 /* Info.plist */,
 			);
 			path = Racing;
 			sourceTree = "<group>";
@@ -227,7 +238,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = "Artem Listopadov";
 				TargetAttributes = {
 					AFCFF7BD26353780002F6E50 = {
@@ -298,6 +309,7 @@
 				AFCFF80C26358DFB002F6E50 /* Sound.swift in Sources */,
 				AFCFF7F626355682002F6E50 /* GameViewController.swift in Sources */,
 				AFCFF7FB26355D6C002F6E50 /* Buttons.swift in Sources */,
+				AF674DF8293FD16100734230 /* Factories.swift in Sources */,
 				AFCFF7F226354949002F6E50 /* SettingsViewController.swift in Sources */,
 				AFCFF7FD2635703D002F6E50 /* GameOverViewController.swift in Sources */,
 				AFCFF8122635C8A4002F6E50 /* Barriers.swift in Sources */,
@@ -363,6 +375,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -424,6 +437,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
